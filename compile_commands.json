@@ -1,0 +1,14 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "build/cloxc.o",
+      "src/cloxc.c"
+    ],
+    "directory": "/home/sag/repos/clox",
+    "file": "/home/sag/repos/clox/src/cloxc.c",
+    "output": "/home/sag/repos/clox/build/cloxc.o"
+  }
+]

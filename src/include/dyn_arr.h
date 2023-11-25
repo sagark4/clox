@@ -1,5 +1,6 @@
 #ifndef DYN_ARR_H
 #define DYN_ARR_H
+#include <stdlib.h>
 
 #define INITIAL_CAPACITY 8
 
@@ -7,7 +8,9 @@
   void init_fun_name(struct_name *ptr) {                                               \
     ptr->cvar = 0;                                                                     \
     ptr->capvar = INITIAL_CAPACITY;                                                    \
-    ptr->storvar = ((unit_type *)malloc(INITIAL_CAPACITY * sizeof(unit_type)));        \
+    void *result = malloc(INITIAL_CAPACITY * sizeof(unit_type));                       \
+    if (result == NULL) exit(1);                                                       \
+    ptr->storvar = ((unit_type *)result);                                              \
   }
 
 #define PUSH_DYN_ARR_FUN(push_fun_name, struct_name, unit_type, cvar, capvar, storvar)          \

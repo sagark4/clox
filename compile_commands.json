@@ -1,15 +1,1 @@
-[
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-std=c99",
-      "-c",
-      "-o",
-      "build/asm.o",
-      "src/asm.c"
-    ],
-    "directory": "/home/sag/repos/clox",
-    "file": "/home/sag/repos/clox/src/asm.c",
-    "output": "/home/sag/repos/clox/build/asm.o"
-  }
-]
+[]

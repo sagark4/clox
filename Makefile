@@ -20,3 +20,5 @@ build/assembled : build/cloxc
 
 clean :
 	rm -f build/*
+
+test: 

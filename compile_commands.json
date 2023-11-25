@@ -5,11 +5,11 @@
       "-std=c99",
       "-c",
       "-o",
-      "build/cloxc.o",
-      "src/cloxc.c"
+      "build/asm.o",
+      "src/asm.c"
     ],
     "directory": "/home/sag/repos/clox",
-    "file": "/home/sag/repos/clox/src/cloxc.c",
-    "output": "/home/sag/repos/clox/build/cloxc.o"
+    "file": "/home/sag/repos/clox/src/asm.c",
+    "output": "/home/sag/repos/clox/build/asm.o"
   }
 ]

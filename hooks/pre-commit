@@ -1,6 +1,15 @@
 #!/bin/sh
 
-changed_c_h_files="$(git diff --cached --name-only --diff-filter=ACM | grep -e '.*\.c$' -e '.*\.h$' | xargs)"
+# run bear if Makefile was modified.
+if [ "$(git diff --cached --name-only --diff-filter=ACMR | grep Makefile | xargs)" = "Makefile" ]
+then
+    echo "Info: Makefile was changed; regenerating compile_commands.json."
+    bear -- make
+    git add compile_commands.json
+fi
+
+# Format .c and .h files.
+changed_c_h_files="$(git diff --cached --name-only --diff-filter=ACMR | grep -e '.*\.c$' -e '.*\.h$' | xargs)"
 if [ "$changed_c_h_files" = "" ]
 then
     echo "No .c or .h files changed to run clang-format on."

@@ -4,5 +4,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 
-#endif // !COMMON_H
+#endif  // COMMON_H

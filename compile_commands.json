@@ -10,5 +10,17 @@
     "directory": "/home/sag/repos/clox",
     "file": "/home/sag/repos/clox/src/cloxc.c",
     "output": "/home/sag/repos/clox/build/cloxc.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-o",
+      "build/asm.o",
+      "src/asm.c"
+    ],
+    "directory": "/home/sag/repos/clox",
+    "file": "/home/sag/repos/clox/src/asm.c",
+    "output": "/home/sag/repos/clox/build/asm.o"
   }
 ]

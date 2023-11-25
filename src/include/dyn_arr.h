@@ -34,10 +34,10 @@
     ptr->storvar = NULL;                                                                   \
   }
 
-#define CREATE_DYN_ARR_FUNCS_STD_NAMES(struct_name, unit_type, cvar, capvar, storvar)       \
-  INIT_DYN_ARR_FUN(init_dynarr##struct_name, struct_name, unit_type, cvar, capvar, storvar) \
-  PUSH_DYN_ARR_FUN(push_##struct_name, struct_name, unit_type, cvar, capvar, storvar)       \
-  POP_DYN_ARR_FUN(pop_##struct_name, struct_name, unit_type, cvar, capvar, storvar)         \
+#define CREATE_DYN_ARR_FUNCS_STD_NAMES(struct_name, unit_type, cvar, capvar, storvar)        \
+  INIT_DYN_ARR_FUN(init_dynarr_##struct_name, struct_name, unit_type, cvar, capvar, storvar) \
+  PUSH_DYN_ARR_FUN(push_##struct_name, struct_name, unit_type, cvar, capvar, storvar)        \
+  POP_DYN_ARR_FUN(pop_##struct_name, struct_name, unit_type, cvar, capvar, storvar)          \
   DELETE_DYN_ARR_FUN(delete_dynarr_##struct_name, struct_name, unit_type, cvar, capvar, storvar)
 
 #endif  // DYN_ARR_H

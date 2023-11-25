@@ -10,7 +10,7 @@ int main(int argc, const char *argv[]) {
   Asm asem;
   init_asm(&asem);
   init_val_arr(&asem.val_arr);
-  printf("Initialized asem and val_arr.\n");
+  init_dynarr_HeapSections(&asem.heap_sections);
   add_constant(&asem, 3.14159);
   add_constant(&asem, 2 * 3.14159);
   push_data_section(&asem);
@@ -19,6 +19,8 @@ int main(int argc, const char *argv[]) {
   push_constant_printing(&asem);
   push_exit_section(&asem);
   generate_asem(&asem);
+  free_heap_sections(&asem.heap_sections);
+  delete_dynarr_HeapSections(&asem.heap_sections);
   delete_val_arr(&asem.val_arr);
   delete_asm(&asem);
   return 0;

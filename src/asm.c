@@ -34,12 +34,15 @@ PUSH_DYN_ARR_FUN(push_section, Asm, const char *, count, capacity, sections)
 POP_DYN_ARR_FUN(pop_section, Asm, const char *, count, capacity, sections)
 DELETE_DYN_ARR_FUN(delete_asm, Asm, const char *, count, capacity, sections)
 
+CREATE_DYN_ARR_FUNCS_STD_NAMES(HeapSections, char *, count, capacity, heap_sections)
+
 void push_data_section(Asm *asem) { push_section(asem, DATA_SECTION); }
 void push_consts(Asm *asem) {
   for (int i = 0; i < asem->val_arr.count; ++i) {
     char *arg = (char *)malloc(50 * sizeof(char));
     sprintf(arg, "\tCONST_%d\tdq\t%g\n", i, *(asem->val_arr.values + i));
     push_section(asem, arg);
+    push_HeapSections(&asem->heap_sections, arg);
   }
 }
 void push_text_section(Asm *asem) { push_section(asem, TEXT_SECTION); }
@@ -50,6 +53,7 @@ void push_constant_printing(Asm *asem) {
     push_section(asem, MOV_RSI_COMMA);
     sprintf(arg, "CONST_%d\n", i);
     push_section(asem, arg);
+    push_HeapSections(&asem->heap_sections, arg);
     push_section(asem, CALL_PRINTF);
   }
 }
@@ -58,4 +62,10 @@ void push_exit_section(Asm *asem) { push_section(asem, EXIT_SECTION); }
 int add_constant(Asm *asem, Value val) {
   push_value(&asem->val_arr, val);
   return asem->val_arr.count - 1;
+}
+
+void free_heap_sections(HeapSections *heap_sections) {
+  for (int i = 0; i < heap_sections->count; ++i) {
+    free(*(heap_sections->heap_sections + i));
+  }
 }

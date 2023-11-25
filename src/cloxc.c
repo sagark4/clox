@@ -6,7 +6,9 @@ void generate_asem(Asm *);
 int main(int argc, const char *argv[]) {
   Asm asem;
   init_asm(&asem);
+  push_init_section(&asem);
   generate_asem(&asem);
+  delete_asm(&asem);
   return 0;
 }
 

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+changed_c_h_files="$(git diff --cached --name-only --diff-filter=ACM | grep -e '.*\.c$' -e '.*\.h$' | xargs)"
+if [ "$changed_c_h_files" = "" ]
+then
+    echo "No .c or .h files changed to run clang-format on."
+else
+    echo "Info: Changed .c and .h files are: $changed_c_h_files."
+    clang-format --style="{BasedOnStyle: Google, ColumnLimit: 100}" -i $changed_c_h_files
+    git add $changed_c_h_files
+fi

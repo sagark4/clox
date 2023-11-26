@@ -16,16 +16,21 @@ char *pop_HeapSections(HeapSections *);
 void delete_dynarr_HeapSections(HeapSections *);
 
 typedef struct {
+  const char *section;
+  int line;
+} Section;
+
+typedef struct {
   int count;
   int capacity;
-  const char **sections;
-  ValueArray val_arr;
+  Section *sections;
+  ValueArray constants;
   HeapSections heap_sections;
 } Asm;
 
 void init_asm(Asm *);
-void push_asm(Asm *, const char *);
-const char *pop_asm(Asm *);
+void push_asm(Asm *, Section);
+Section *pop_asm(Asm *);
 void delete_asm(Asm *);
 
 void push_data_section(Asm *);

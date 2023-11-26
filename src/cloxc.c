@@ -9,7 +9,7 @@ void generate_asem(Asm *);
 int main(int argc, const char *argv[]) {
   Asm asem;
   init_asm(&asem);
-  init_val_arr(&asem.val_arr);
+  init_val_arr(&asem.constants);
   init_dynarr_HeapSections(&asem.heap_sections);
   add_constant(&asem, 3.14159);
   add_constant(&asem, 2 * 3.14159);
@@ -21,7 +21,7 @@ int main(int argc, const char *argv[]) {
   generate_asem(&asem);
   free_heap_sections(&asem.heap_sections);
   delete_dynarr_HeapSections(&asem.heap_sections);
-  delete_val_arr(&asem.val_arr);
+  delete_val_arr(&asem.constants);
   delete_asm(&asem);
   return 0;
 }
@@ -30,7 +30,7 @@ void generate_asem(Asm *asem) {
   FILE *fp = fopen("asem.asm", "ab");
   if (fp != NULL) {
     for (int i = 0; i < asem->count; ++i) {
-      fputs(asem->sections[i], fp);
+      fputs(asem->sections[i].section, fp);
     }
     fclose(fp);
   }

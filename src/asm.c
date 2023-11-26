@@ -1,5 +1,6 @@
 #include "include/asm.h"
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -29,39 +30,66 @@ static const char CALL_PRINTF[] = "\tcall printf\n";
 static const char MOV_RDI_DOUBLEFMT[] = "\tmov rdi,fmtdouble\n";
 static const char MOV_RSI_COMMA[] = "\tmov rsi,";
 
-INIT_DYN_ARR_FUN(init_asm, Asm, const char *, count, capacity, sections)
-PUSH_DYN_ARR_FUN(push_section, Asm, const char *, count, capacity, sections)
-POP_DYN_ARR_FUN(pop_section, Asm, const char *, count, capacity, sections)
-DELETE_DYN_ARR_FUN(delete_asm, Asm, const char *, count, capacity, sections)
+INIT_DYN_ARR_FUN(init_asm, Asm, Section, count, capacity, sections)
+PUSH_DYN_ARR_FUN(push_section, Asm, Section, count, capacity, sections)
+POP_DYN_ARR_FUN(pop_section, Asm, Section, count, capacity, sections)
+DELETE_DYN_ARR_FUN(delete_asm, Asm, Section, count, capacity, sections)
 
 CREATE_DYN_ARR_FUNCS_STD_NAMES(HeapSections, char *, count, capacity, heap_sections)
 
-void push_data_section(Asm *asem) { push_section(asem, DATA_SECTION); }
+void push_data_section(Asm *asem) {
+  Section sec;
+  sec.section = DATA_SECTION;
+  sec.line = -1;
+  push_section(asem, sec);
+}
+
 void push_consts(Asm *asem) {
-  for (int i = 0; i < asem->val_arr.count; ++i) {
+  for (int i = 0; i < asem->constants.count; ++i) {
     char *arg = (char *)malloc(50 * sizeof(char));
-    sprintf(arg, "\tCONST_%d\tdq\t%g\n", i, *(asem->val_arr.values + i));
-    push_section(asem, arg);
+    sprintf(arg, "\tCONST_%d\tdq\t%g\n", i, *(asem->constants.values + i));
+    Section sec;
+    sec.section = arg;
+    sec.line = 1;
+    push_section(asem, sec);
     push_HeapSections(&asem->heap_sections, arg);
   }
 }
-void push_text_section(Asm *asem) { push_section(asem, TEXT_SECTION); }
+void push_text_section(Asm *asem) {
+  Section sec;
+  sec.section = TEXT_SECTION;
+  sec.line = INT32_MAX;
+  push_section(asem, sec);
+}
 void push_constant_printing(Asm *asem) {
-  for (int i = 0; i < asem->val_arr.count; ++i) {
+  for (int i = 0; i < asem->constants.count; ++i) {
     char *arg = (char *)malloc(50 * sizeof(char));
-    push_section(asem, MOV_RDI_DOUBLEFMT);
-    push_section(asem, MOV_RSI_COMMA);
+    Section sec;
+    sec.section = MOV_RDI_DOUBLEFMT;
+    sec.line = i;
+
+    push_section(asem, sec);
+    sec.section = MOV_RSI_COMMA;
+    push_section(asem, sec);
+
     sprintf(arg, "CONST_%d\n", i);
-    push_section(asem, arg);
+    sec.section = arg;
+    push_section(asem, sec);
     push_HeapSections(&asem->heap_sections, arg);
-    push_section(asem, CALL_PRINTF);
+    sec.section = CALL_PRINTF;
+    push_section(asem, sec);
   }
 }
-void push_exit_section(Asm *asem) { push_section(asem, EXIT_SECTION); }
+void push_exit_section(Asm *asem) {
+  Section sec;
+  sec.section = EXIT_SECTION;
+  sec.line = INT32_MAX;
+  push_section(asem, sec);
+}
 
 int add_constant(Asm *asem, Value val) {
-  push_value(&asem->val_arr, val);
-  return asem->val_arr.count - 1;
+  push_value(&asem->constants, val);
+  return asem->constants.count - 1;
 }
 
 void free_heap_sections(HeapSections *heap_sections) {

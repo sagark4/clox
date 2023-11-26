@@ -28,7 +28,7 @@ static const char EXIT_SECTION[] = "\tcall exit\n";
 static const char EXTERN_PRINTF[] = "\textern printf\n";
 static const char CALL_PRINTF[] = "\tcall printf\n";
 static const char MOV_RDI_DOUBLEFMT[] = "\tmov rdi,fmtdouble\n";
-static const char MOV_RSI_COMMA[] = "\tmov rsi,";
+static const char RAX_1_MOV_XMM0_QW[] = "\tmov rax,1\n\tmovsd xmm0, qword ";
 
 INIT_DYN_ARR_FUN(init_asm, Asm, Section, count, capacity, sections)
 PUSH_DYN_ARR_FUN(push_section, Asm, Section, count, capacity, sections)
@@ -69,10 +69,10 @@ void push_constant_printing(Asm *asem) {
     sec.line = i;
 
     push_section(asem, sec);
-    sec.section = MOV_RSI_COMMA;
+    sec.section = RAX_1_MOV_XMM0_QW;
     push_section(asem, sec);
 
-    sprintf(arg, "CONST_%d\n", i);
+    sprintf(arg, "[CONST_%d]\n", i);
     sec.section = arg;
     push_section(asem, sec);
     push_HeapSections(&asem->heap_sections, arg);

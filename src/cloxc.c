@@ -1,37 +1,41 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-#include "include/asm.h"
-#include "include/common.h"
-#include "include/value.h"
+#include "include/compiler.h"
 
-void generate_asem(Asm *);
+static char *read_file(const char *);
 
 int main(int argc, const char *argv[]) {
-  Asm asem;
-  init_asm(&asem);
-  init_val_arr(&asem.constants);
-  init_dynarr_HeapSections(&asem.heap_sections);
-  add_constant(&asem, 3.14159);
-  add_constant(&asem, 2 * 3.14159);
-  push_data_section(&asem);
-  push_consts(&asem);
-  push_text_section(&asem);
-  push_constant_printing(&asem);
-  push_exit_section(&asem);
-  generate_asem(&asem);
-  free_heap_sections(&asem.heap_sections);
-  delete_dynarr_HeapSections(&asem.heap_sections);
-  delete_val_arr(&asem.constants);
-  delete_asm(&asem);
+  if (argc != 2) {
+    fprintf(stderr, "Usage: cloxc filename.\n");
+    exit(64);
+  }
+  char *source = read_file(argv[1]);
+  compile(source);
   return 0;
 }
 
-void generate_asem(Asm *asem) {
-  FILE *fp = fopen("asem.asm", "ab");
-  if (fp != NULL) {
-    for (int i = 0; i < asem->count; ++i) {
-      fputs(asem->sections[i].section, fp);
-    }
-    fclose(fp);
+static char *read_file(const char *path) {
+  FILE *fp;
+  if (!(fp = fopen(path, "rb"))) {
+    fprintf(stderr, "Error fopen-ing file %s.  Exiting.\n", path);
+    exit(74);
   }
+  if (fseek(fp, 0, SEEK_END)) {
+    fprintf(stderr, "Error fseek-ing file %s.  Exiting.\n", path);
+    exit(-1);
+  }
+  int size = ftell(fp);
+  rewind(fp);
+  char *text = (char *)malloc(size + 1);
+  if (text == NULL) {
+    fprintf(stderr, "Could not get enough memory.\n");
+  }
+  int bytes_read = fread(text, sizeof(char), size, fp);
+  if (bytes_read != size) {
+    fprintf(stderr, "Could not read the whole file %s.\n", path);
+  }
+  fclose(fp);
+  *(text + size) = '\0';
+  return text;
 }

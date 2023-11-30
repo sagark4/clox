@@ -1,1 +1,28 @@
-[]
+[
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-std=c99",
+      "-c",
+      "-o",
+      "build/cloxc.o",
+      "src/cloxc.c"
+    ],
+    "directory": "/home/sag/repos/clox",
+    "file": "/home/sag/repos/clox/src/cloxc.c",
+    "output": "/home/sag/repos/clox/build/cloxc.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-std=c99",
+      "-c",
+      "-o",
+      "build/compiler.o",
+      "src/compiler.c"
+    ],
+    "directory": "/home/sag/repos/clox",
+    "file": "/home/sag/repos/clox/src/compiler.c",
+    "output": "/home/sag/repos/clox/build/compiler.o"
+  }
+]
